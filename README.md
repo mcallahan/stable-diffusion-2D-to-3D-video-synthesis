@@ -12,8 +12,9 @@ Installing the Depth extension was as easy as opening the 'Extensions' tab in th
 
 To start I converted the target video into separate PNG images with ffmpeg: `ffmpeg -i original.mkv frames/image-%04d.png`.  Note that converting from a video format to PNG frames can use a large amount of disk space as it is not as efficient of a format.
 
-[![Original video](https://img.youtube.com/vi/SfrOwzHhQKU/0.jpg)](https://youtu.be/SfrOwzHhQKU)
-[Original source video](video/original.mkv)
+[![Original video](https://img.youtube.com/vi/SfrOwzHhQKU/0.jpg)](https://youtu.be/SfrOwzHhQKU)<br>
+[Original video on YouTube](https://youtu.be/SfrOwzHhQKU)<br>
+[Original video download](video/original.mkv)
 
 The webgui Depth format already supports 'Batch From Directory' so I simply ran it with the image frames and the following option settings:
 * Check 'Match input size'
@@ -25,13 +26,15 @@ Running Stable Diffusion in this way took 262 minutes for 1373 frames of size 10
 
 A test video was made after all of the depth images had been created to provide insight into how stable hte resulting synthesis was across frames.  Stable Diffusion does not receive any frame to frame information so each depth image is independent of the others.  It turns out that there is quite a bit of flicker in the resulting depth map but it is not as noticeable in the resulting 3D video. `ffmpeg -framerate 29.97 -i 'depth/image-%04d-0000.png' -c:v libx265 -pix_fmt yuv420p depth.mpk`
 
-[![Depth video](https://img.youtube.com/vi/R_KGRCTsQVc/0.jpg)](https://youtu.be/R_KGRCTsQVc)
-[Depth source video](video/depth.mkv)
+[![Depth video](https://img.youtube.com/vi/R_KGRCTsQVc/0.jpg)](https://youtu.be/R_KGRCTsQVc)<br>
+[Depth video on YouTube](https://youtu.be/R_KGRCTsQVc)<br>
+[Depth video download](video/depth.mkv)
 
 Next I reassembled the images back into a 3D video via ffmpeg again: `ffmpeg -framerate 29.97 -i 'depth/image-%04d-0001_stereo.png' -c:v libx265 -pix_fmt yuv420p -metadata:s:v stereo_mode=left_right stereo.mkv`  Note that this reencodes the video using default x265 settings.
 
-[![Stereo video](https://img.youtube.com/vi/wCGxXOy_RDs/0.jpg)](https://youtu.be/wCGxXOy_RDs)
-[Stereo source video](video/stereo.mkv)
+[![Stereo video](https://img.youtube.com/vi/wCGxXOy_RDs/0.jpg)](https://youtu.be/wCGxXOy_RDs)<br>
+[Stereo video on YouTube](https://youtu.be/wCGxXOy_RDs)<br>
+[Stereo video download](video/stereo.mkv)
 
 ## Notes
 
@@ -71,7 +74,7 @@ Interestingly the Stable Diffusion Depth extension is already set up to create s
 
 ### Simplify use case
 
-Most of the depth map flickering is on the background elements.  This method could work great for talking heads or chat applications where the backgrounds are not as important.
+Most of the depth map flickering is on the background elements.  This method could work great for talking heads or other restricted video applications where the backgrounds are not as important.  It would be worth processing a corpus of video to see what works best.
 
 ### Upstream the converter as a webui extension
 
